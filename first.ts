@@ -36,8 +36,14 @@ const g: 5 = 5;
 // interface Add {
 //     (x: number, y: number): number;
 // }
-
 // const add: Add = (x, y) => x + y;
+
+// ++ 심화 과정
+function add(x: number, y: number): number; // 위에는 타이핑만 되어있고
+function add(x, y) {
+  // 아래는 선언만 되어있다.
+  return x + y;
+}
 
 // [객체 타입 정의 방법]
 const obj = { lat: 37.5, lon: 127.5 };
@@ -46,3 +52,22 @@ const obj = { lat: 37.5, lon: 127.5 };
 const arr = ["123", "456"];
 // const arr2 = [123, 456];
 const arr3: [number, number, string] = [123, 456, "hello"]; // 튜플 : 길이가 고정된 배열
+
+// ** 자바스크립트로 변환할 때 사라지는 부분 **
+// 이런것들 없이도 돌아갈 수 있게끔 만들어야 함
+// 1. : (타이핑 시 콜론)
+// const f: true = true; => const f = true;
+// 2.
+// type Add = () => number;
+// 3.
+// interface Minus {}
+// 4.
+// Array<string>;
+// 5.
+// function add(x: number, y: number): number;  // 요부분 사라짐
+// function add(x, y) {
+//     return x + y;
+// }
+// 6. as
+// let aa = 123;
+// aa = 'hello' as unknown as number ;  // 타입을 강제로 바꿔준다.
