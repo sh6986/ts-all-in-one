@@ -7,6 +7,8 @@
 // const d = undefined;
 // const e: null = null;
 
+import { NumberLiteralType } from "typescript";
+
 // 값을 고정할수도 있음
 // const f: true = true;
 // const g: 5 = 5;
@@ -39,14 +41,14 @@
 // const add: Add = (x, y) => x + y;
 
 // ++ 심화 과정
-function add(x: number, y: number): number; // 위에는 타이핑만 되어있고
-function add(x, y) {
-  // 아래는 선언만 되어있다.
-  return x + y;
-}
+// function add(x: number, y: number): number; // 위에는 타이핑만 되어있고
+// function add(x, y) {
+// 아래는 선언만 되어있다.
+//   return x + y;
+// }
 
 // [객체 타입 정의 방법]
-const obj = { lat: 37.5, lon: 127.5 };
+// const obj = { lat: 37.5, lon: 127.5 };
 
 // [배열 타입 정의 방법]
 // const arr = ["123", "456"];
@@ -89,19 +91,19 @@ const obj = { lat: 37.5, lon: 127.5 };
 // const head = document.querySelector("#head")!;
 // console.log(head);
 
-const head = document.querySelector("#head");
-if (head) {
-  console.log(head);
-}
+// const head = document.querySelector("#head");
+// if (head) {
+//   console.log(head);
+// }
 
-// string 과 String 구분 주의. 서로 다른 타입이다. String은 래퍼 개체 (new String 할때 사용함)
-const a: string = "hello";
-const b: String = "hell";
+// [string 과 String 구분 주의. 서로 다른 타입이다. String은 래퍼 개체 (new String 할때 사용함)]
+// const a: string = "hello";
+// const b: String = "hell";
 
-function c(a1: string, b1: string) {}
-c(a, b);
+// function c(a1: string, b1: string) {}
+// c(a, b);
 
-// 템플릿 리터럴 타입이 존재 (유니언 등 사용 가능)
+// [템플릿 리터럴 타입이 존재 (유니언 등 사용 가능)]
 type World = "world" | "hell";
 const d: World = "world";
 
@@ -110,10 +112,10 @@ type Greeting = `hello ${World}`;
 //      hello world, hello hell 둘다 자동완성 된다.
 const e: Greeting = "hello hell";
 
-// rest
+// [rest]
 function rest(...args: string[]) {}
 
-// enum
+// [enum]
 // 여러개의 변수들을 하나의 그룹으로 묶고 싶을 때 사용
 const enum Editrection {
   Up,
@@ -180,3 +182,31 @@ run(ODirection.Right);
 const obj2 = { a: "123", b: "hello", c: "world" } as const;
 type Key = keyof typeof obj2; // 키값들
 type Key2 = typeof obj2[keyof typeof obj2]; // value들
+
+// [type과 interface]
+// type - 간단하게 하고 싶을때
+// type A = { a: string };
+// const a: A = { a: "hello" };
+// interface - 객체지향 프로그래밍을 하고싶을때
+// interface B {
+//   a: string;
+// }
+// const b: B = { a: "hello" };
+
+// [union(|)]
+// 여러 타입을 마음대로 사용할 수 있다. 대신 타입추론이 제대로 되지 않는다.
+function add(x: string | number, y: string | number): string | number {
+  return x + y;
+}
+// add 리턴타입이 string | number 라면 아래 경우도 타입적으로 맞아야 함
+const result: string | number = add(1, 2);
+// 실제 result는 number인데 string으로 착각할 수 있음.
+// result.charAt() 이렇게 쓰게 되면은 에러남
+// 계속 연달아 문제가 생기므로 처음 타입을 잘 잡아놔야 함
+
+// [intersection(&)]
+// type A = { hello: "world" } & { zero: "cho" };  // 모든 속성이 다 있어야 한다.
+// const a: A = { hello: "world", zero: "cho" };
+
+type A = { hello: "world" } | { zero: "cho" }; // 여러개중에 하나만 있으면 된다.
+const a: A = { hello: "world" };
