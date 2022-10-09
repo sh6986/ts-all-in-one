@@ -1,15 +1,15 @@
 // [변수 타입 정의 방법]
 // const a: string = "5";  // 타입스크립트가 5라는 정확한 추론을 해줬는데 string으로 더 넓은 부정확한 타입으로 정의하였기 때문에 좋지 않은 방식이다.
 // 타입스크립트가 정확히 추론을 해줬다면, 건들지 말고 그대로 쓴다. 추론을 잘못 했거나 any 타입으로 추론했을 시에 타입을 정의해준다.
-const a = "5";
-const b = 5;
-const c = true;
-const d = undefined;
-const e: null = null;
+// const a = "5";
+// const b = 5;
+// const c = true;
+// const d = undefined;
+// const e: null = null;
 
 // 값을 고정할수도 있음
-const f: true = true;
-const g: 5 = 5;
+// const f: true = true;
+// const g: 5 = 5;
 // const h: boolean = true; // true 할당한 순간 h는 평생 true값이므로 타입이 boolean일 필요가 없다. 타입은 정확하게 하는것이 좋다
 
 // const f: any = "123"; // 모든 타입을 넣을 수 있음. 타입스크립트를 쓰는 아무의마가 없다.
@@ -49,16 +49,19 @@ function add(x, y) {
 const obj = { lat: 37.5, lon: 127.5 };
 
 // [배열 타입 정의 방법]
-const arr = ["123", "456"];
+// const arr = ["123", "456"];
 // const arr2 = [123, 456];
-const arr3: [number, number, string] = [123, 456, "hello"]; // 튜플 : 길이가 고정된 배열
+// const arr3: [number, number, string] = [123, 456, "hello"]; // 튜플 : 길이가 고정된 배열
+// const tuple: [string, number] = ["1", 1];
+// tuple[2] = "hello";  // 얘는 에러나지만
+// tuple.push("hello");  // 얘는 에러나지 않는다.
 // 빈배열은 never 타입이기 때문에 선언시 반드시 타이핑을 해줘야 한다. 그래야 나중에 push 등 할 수 있다.
-try {
-  const array2: string[] = [];
-  array2.push("hello");
-} catch (err) {
-  err;
-}
+// try {
+//   const array2: string[] = [];
+//   array2.push("hello");
+// } catch (err) {
+//   err;
+// }
 
 // ** 자바스크립트로 변환할 때 사라지는 부분 **
 // 이런것들 없이도 돌아갈 수 있게끔 만들어야 함
@@ -90,3 +93,90 @@ const head = document.querySelector("#head");
 if (head) {
   console.log(head);
 }
+
+// string 과 String 구분 주의. 서로 다른 타입이다. String은 래퍼 개체 (new String 할때 사용함)
+const a: string = "hello";
+const b: String = "hell";
+
+function c(a1: string, b1: string) {}
+c(a, b);
+
+// 템플릿 리터럴 타입이 존재 (유니언 등 사용 가능)
+type World = "world" | "hell";
+const d: World = "world";
+
+type Greeting = `hello ${World}`;
+
+//      hello world, hello hell 둘다 자동완성 된다.
+const e: Greeting = "hello hell";
+
+// rest
+function rest(...args: string[]) {}
+
+// enum
+// 여러개의 변수들을 하나의 그룹으로 묶고 싶을 때 사용
+const enum Editrection {
+  Up,
+  Down,
+  Left,
+  Right,
+}
+const f = Editrection.Up;
+const g = Editrection.Left;
+// 첫 값 지정 가능
+const enum Editrection2 {
+  Up = 3,
+  Down,
+  Left,
+  Right,
+}
+// 각자 불규칙하게 지정 가능
+const enum Editrection3 {
+  Up = 3,
+  Down = 5,
+  Left = 4,
+  Right = 6,
+}
+// 문자열도 지정 가능
+const enum Editrection4 {
+  Up = "123",
+  Down = "hello",
+  Left = "wow",
+  Right = "enum",
+}
+// enum은 타입으로 사용할 수도 있음
+function walk(dir: Editrection) {}
+walk(Editrection.Down);
+
+// enum 말고 객체를 사용할 수 도 있음
+// enum 사용 -> 자바스크립트로 변환시 사라짐
+// 객체 사용 -> 자바스크립트로 변환시 사라지지 않음
+// const ODirection = {
+//   Up: 0,
+//   Down: 1,
+//   Left: 2,
+//   Right: 3,
+// };
+// 각 속성에 대한 추론을 이상하게 하므로 직접 타이핑을 해줘야 한다. as const를 붙여준다.
+// const ODirection: { Up: 0; Down: 1; Left: 2; Right: 3 } = {
+//   Up: 0,
+//   Down: 1,
+//   Left: 2,
+//   Right: 3,
+// };
+// 이 방식보다 좀 더 간편한게 as const이다. (해당 값을 상수로 쓰겠다.)
+// 수정못하도록 읽기전용으로 readonly도 정확하게 고정된다.
+const ODirection = {
+  Up: 0,
+  Down: 1,
+  Left: 2,
+  Right: 3,
+} as const;
+// 객체방식을 타입으로 사용하려면 좀 복잡하다.
+type Direction = typeof ODirection[keyof typeof ODirection];
+function run(dir: Direction) {}
+run(ODirection.Right);
+
+const obj2 = { a: "123", b: "hello", c: "world" } as const;
+type Key = keyof typeof obj2; // 키값들
+type Key2 = typeof obj2[keyof typeof obj2]; // value들
