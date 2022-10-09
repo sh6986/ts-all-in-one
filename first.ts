@@ -52,6 +52,13 @@ const obj = { lat: 37.5, lon: 127.5 };
 const arr = ["123", "456"];
 // const arr2 = [123, 456];
 const arr3: [number, number, string] = [123, 456, "hello"]; // 튜플 : 길이가 고정된 배열
+// 빈배열은 never 타입이기 때문에 선언시 반드시 타이핑을 해줘야 한다. 그래야 나중에 push 등 할 수 있다.
+try {
+  const array2: string[] = [];
+  array2.push("hello");
+} catch (err) {
+  err;
+}
 
 // ** 자바스크립트로 변환할 때 사라지는 부분 **
 // 이런것들 없이도 돌아갈 수 있게끔 만들어야 함
@@ -71,3 +78,15 @@ const arr3: [number, number, string] = [123, 456, "hello"]; // 튜플 : 길이�
 // 6. as
 // let aa = 123;
 // aa = 'hello' as unknown as number ;  // 타입을 강제로 바꿔준다.
+
+// [느낌표(!)]
+// 타입이 Element | null 일때 해당 값이 null 이 아닐거라고 확신할 때 ! 를 사용해서 Element로 타이핑 할 수 있다.
+// 따라서 무조건 존재하는, null이나 undefined가 아님을 보증하는 방식
+// 권장하지는 않는다. if 문을 통해서 사용하는 방식 권장
+// const head = document.querySelector("#head")!;
+// console.log(head);
+
+const head = document.querySelector("#head");
+if (head) {
+  console.log(head);
+}
